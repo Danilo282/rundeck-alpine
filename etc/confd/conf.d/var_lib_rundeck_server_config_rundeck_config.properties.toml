@@ -1,0 +1,18 @@
+[template]
+src = "var/lib/rundeck/server/config/rundeck-config.properties"
+dest = "/var/lib/rundeck/server/config/rundeck-config.properties"
+owner = "rundeck"
+keys = [
+    "/datasource/dbname",
+    "/datasource/host",
+    "/datasource/port",
+    "/datasource/user",
+    "/datasource/password",
+    "/rdeck/base",
+    "/rdeck/url",
+    "/rdeck/keys/storage/type",
+    "/rdeck/project/storage/type",
+    "/rdeck/ssl/enabled",
+    "/rdeck/threads/count",
+    "/log/level"
+]

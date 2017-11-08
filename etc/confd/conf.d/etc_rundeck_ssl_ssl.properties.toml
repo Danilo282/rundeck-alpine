@@ -1,0 +1,9 @@
+[template]
+src = "etc/rundeck/ssl/ssl.properties"
+dest = "/etc/rundeck/ssl/ssl.properties"
+owner = "rundeck"
+keys = [
+    "/ssl/key/password",
+    "/ssl/keystore/password",
+    "/ssl/truststore/password"
+]

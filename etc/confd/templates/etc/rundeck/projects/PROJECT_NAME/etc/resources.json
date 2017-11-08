@@ -1,0 +1,17 @@
+{
+    {{ $data := json (getv "/nodes") }}
+    {{ range $data.PROJECT_INTERNAL_NAME }}
+        "{{.name}}": {
+            "node_name": "{{.name}}",
+            "description": "{{.description}}",
+            "tags": "{{.tags}}",
+            "hostname": "{{.hostname}}",
+            "osArch": "{{.osArch}}",
+            "osFamily": "{{.osFamily}}",
+            "osName": "{{.osName}}",
+            "osVersion": "{{.osVersion}}",
+            "username": "{{.username}}"
+        },
+    {{ end }}
+    "":{}
+}

@@ -1,0 +1,9 @@
+[template]
+src = "etc/rundeck/project.properties"
+dest = "/etc/rundeck/project.properties"
+owner = "rundeck"
+keys = [
+    "/rdeck/config",
+    "/project/description",
+    "/project/organization"
+]

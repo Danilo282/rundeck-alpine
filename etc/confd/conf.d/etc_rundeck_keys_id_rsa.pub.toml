@@ -1,0 +1,7 @@
+[template]
+src = "etc/rundeck/keys/id_rsa.pub"
+dest = "/etc/rundeck/keys/id_rsa.pub"
+owner = "rundeck"
+keys = [
+    "/keys/pub/key"
+]

@@ -1,0 +1,7 @@
+[template]
+src = "etc/rundeck/profile"
+dest = "/etc/rundeck/profile"
+owner = "rundeck"
+keys = [
+    "/rdeck/base"
+]

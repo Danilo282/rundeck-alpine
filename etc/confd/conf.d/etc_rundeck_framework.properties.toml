@@ -1,0 +1,14 @@
+[template]
+src = "etc/rundeck/framework.properties"
+dest = "/etc/rundeck/framework.properties"
+owner = "rundeck"
+keys = [
+    "/admin/user",
+    "/admin/password",
+    "/rdeck/base",
+    "/rdeck/config",
+    "/rdeck/host",
+    "/rdeck/port",
+    "/rdeck/ssl/enabled",
+    "/ssh/user"
+]
