@@ -45,32 +45,9 @@ if [ ! -f $lock_file ]; then
 
     echo "  # Setting permissions and ownership..." 
     chown -R rundeck: "${rdeck_config}" "${rdeck_home}"
-    chown -R 750 "${rdeck_config}"
+    chmod -R 750 "${rdeck_config}"
     echo "  # All permissions and ownership set up."
-
-    if [[ "${no_local_db}" == "false" ]]; then
-        echo "  # Installing MySQL and setup local database..."
-        apk add --update --no-cache mysql
-        echo "  # MySQL and local database installed and configured."
-    else
-        echo "  # Database used is not local. Skypping setup..."
-    fi
-
-    echo "  # Downloading default plugins..."
-
-    echo "  # Default plugins downloaded."
-
-    #echo "  # Configuring nodes by project..."
-    #if [ -z ${NODES} ]; then 
-    #    #update_nodes $(curl -f -s -XGET ${VAULT_URL}${VAULT_NODES_PATH} -H "Content-Type: application/json" -H "Accept: application/json" -H "Content-Type: ${VAULT_TOKEN}" )
-    #    update_nodes ${NODES}
-    #    echo ""
-    #else 
-    #    update_nodes ${NODES}
-    #    echo ""
-    #fi
-    #echo "  # All projects' nodes were configured." 
-
+    
     echo "  # Creating lock to avoid execution of unnecessary steps..."
     touch ${rdeck_home}/.entrypoint.lock
     echo "  # Lock created."

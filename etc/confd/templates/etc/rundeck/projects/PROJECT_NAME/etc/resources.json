@@ -1,5 +1,5 @@
 {
-    {{ $data := json (getv "/nodes") }}
+    {{ $data := json (getv "/project/nodes") }}
     {{ range $data.PROJECT_INTERNAL_NAME }}
         "{{.name}}": {
             "node_name": "{{.name}}",

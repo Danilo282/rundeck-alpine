@@ -17,15 +17,13 @@ ENV \
     RDECK_PORT=4440 \
     RDECK_URL="localhost:4440" \
     RDECK_THREADS_COUNT=10 \
-    NO_LOCAL_MYSQL=true \
     LOG_LEVEL="INFO" \
     ADMIN_USER="admin" \
     ADMIN_PASSWORD="adminadmin" \ 
     SSH_USER="rundeck" \
-    NODES={} \
+    PROJECT_NODES={} \
     PROJECT_DESCRIPTION="" \
     PROJECT_ORGANIZATION="" \
-    RD_USERS={} \
     \
     DATASOURCE_DBNAME="rundeck" \
     DATASOURCE_HOST="mysql-host" \
@@ -56,7 +54,7 @@ RUN \
     apk add --update --no-cache \
         $PKGS && \
     pip install -U pip && \
-    pip install http://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-${MYSQL_CONN_VERSION}.tar.gz && \
+    pip install http://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-${MYSQL_CONN_VERSION}.tar.gz urllib3 && \
     echo "Downloading Rundeck..." && curl -k -L -s http://download.rundeck.org/jar/rundeck-launcher-${RDECK_VERSION}.jar -o ${RDECK_BASE}/rundeck.jar && \
     echo "Verifying Rundeck download..." && echo "3ab683a614d22af0338b8b5194a3e07105d3979d *${RDECK_BASE}/rundeck.jar"| sha1sum -c - && \
     echo "Installing Rundeck..." && java -jar ${RDECK_BASE}/rundeck.jar --installonly -b ${RDECK_BASE} -c ${RDECK_CONFIG} && \
