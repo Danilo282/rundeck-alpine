@@ -3,7 +3,9 @@ FROM openjdk:8u131-jre-alpine
 LABEL maintainer "Hugo Fonseca <hugofonseca93@hotmail.com>"
 
 ENV \
-    DEPS="bash ca-certificates curl jq openssh-client py-mysqldb py-requests supervisor" \
+    DEPS="py-pip" \
+    PKGS="bash ca-certificates curl jq openssh-client py-mysqldb py-requests supervisor" \
+    MYSQL_CONN_VERSION="2.0.5" \
     \
     RDECK_VERSION="2.10.0" \
     RDECK_BASE="/var/lib/rundeck" \
@@ -47,8 +49,12 @@ COPY rundeck-configs/. /etc/rundeck/
 COPY etc/ /etc/
 
 RUN \
-    apk add --update --no-cache \
+    apk add --update --no-cache --virtual .deps \
         $DEPS && \
+    apk add --update --no-cache \
+        $PKGS && \
+    pip install -U pip && \
+    pip install http://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-${MYSQL_CONN_VERSION}.tar.gz && \
     echo "Downloading Rundeck..." && curl -k -L -s http://download.rundeck.org/jar/rundeck-launcher-${RDECK_VERSION}.jar -o ${RDECK_BASE}/rundeck.jar && \
     echo "Verifying Rundeck download..." && echo "3ab683a614d22af0338b8b5194a3e07105d3979d *${RDECK_BASE}/rundeck.jar"| sha1sum -c - && \
     echo "Installing Rundeck..." && java -jar ${RDECK_BASE}/rundeck.jar --installonly -b ${RDECK_BASE} -c ${RDECK_CONFIG} && \
@@ -58,7 +64,7 @@ RUN \
     echo "Creating Rundeck user and group..." && addgroup rundeck && adduser -h ${RDECK_BASE} -D -s /bin/bash -G rundeck rundeck && \
     mkdir -v -p "${RDECK_CONFIG}"/ssl  "${RDECK_CONFIG}"/keys "${RDECK_CONFIG}"/projects && \
     echo "Changing ownership and permissions..." && chmod -R +x /var/lib/rundeck/scripts/ && \
-    rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+    apk del .deps && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
 WORKDIR ${RDECK_BASE}
 
