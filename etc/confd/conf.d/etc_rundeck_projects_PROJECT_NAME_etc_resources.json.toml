@@ -2,5 +2,5 @@
 src = "etc/rundeck/projects/PROJECT_NAME/etc/resources.json"
 dest = "/etc/rundeck/projects/PROJECT_NAME/etc/resources.json"
 keys = [
-    "/nodes"
+    "/project/nodes"
 ]

@@ -21,10 +21,9 @@ ENV \
     ADMIN_USER="admin" \
     ADMIN_PASSWORD="adminadmin" \ 
     SSH_USER="rundeck" \
-    NODES={} \
+    PROJECT_NODES={} \
     PROJECT_DESCRIPTION="" \
     PROJECT_ORGANIZATION="" \
-    RD_USERS={} \
     \
     DATASOURCE_DBNAME="rundeck" \
     DATASOURCE_HOST="mysql-host" \

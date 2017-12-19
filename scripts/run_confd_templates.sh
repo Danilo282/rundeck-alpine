@@ -17,8 +17,7 @@ confd_template_folder="/etc/confd/templates/etc/rundeck/projects"
 confd_configuration_folder="/etc/confd/conf.d"
 project_configuration_folder="/etc/rundeck"
 
-for project in $(echo $NODES | jq '.= keys|.[]' | sed 's/\"//g')
-do
+for project in $(echo $PROJECT_NODES | jq '.= keys|.[]' | sed 's/\"//g'); do
   project_name=$(echo ${project} | sed 's/_/-/g' | tr '[:upper:]' '[:lower:]')
   # duplicate template folders (confd)
   cp -r ${confd_template_folder}/PROJECT_NAME ${confd_template_folder}/${project_name}
