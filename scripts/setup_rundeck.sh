@@ -4,10 +4,9 @@ echo "### Starting automated Rundeck setup... ###"
 
 rdeck_home=${RDECK_BASE:-/var/lib/rundeck}
 rdeck_config=${RDECK_CONFIG:-/etc/rundeck}
-rdeck_version=${RDECK_VERSION:-2.9.3}
+rdeck_version=${RDECK_VERSION:-2.10.2}
 profile=${RDECK_CONFIG}/profile
 lock_file=${rdeck_home}/.entrypoint.lock
-no_local_db=${NO_LOCAL_MYSQL:-true}
 
 while [ ! -f ${profile} ]; do
     echo "Rundeck is being installed. Waiting till it finishes..."
@@ -46,15 +45,7 @@ if [ ! -f $lock_file ]; then
     echo "  # Setting permissions and ownership..." 
     chown -R rundeck: "${rdeck_config}" "${rdeck_home}"
     chown -R 750 "${rdeck_config}"
-    echo "  # All permissions and ownership set up."
-
-    if [[ "${no_local_db}" == "false" ]]; then
-        echo "  # Installing MySQL and setup local database..."
-        apk add --update --no-cache mysql
-        echo "  # MySQL and local database installed and configured."
-    else
-        echo "  # Database used is not local. Skypping setup..."
-    fi
+    echo "  # All permissions and ownership set up."    
 
     echo "  # Downloading default plugins..."
 
