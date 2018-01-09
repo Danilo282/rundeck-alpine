@@ -4,7 +4,7 @@ LABEL maintainer "Hugo Fonseca <hugofonseca93@hotmail.com>"
 
 ENV \
     DEPS="py-pip" \
-    PKGS="bash ca-certificates curl jq openssh-client py-mysqldb py-requests supervisor" \
+    PKGS="bash ca-certificates curl jq openssh-client py-requests supervisor" \
     MYSQL_CONN_VERSION="2.1.7" \
     \
     RDECK_VERSION="2.10.2" \
