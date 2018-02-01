@@ -7,7 +7,7 @@ ENV \
     PKGS="bash ca-certificates curl jq openssh-client py-requests supervisor" \
     MYSQL_CONN_VERSION="2.1.7" \
     \
-    RDECK_VERSION="2.10.2" \
+    RDECK_VERSION="2.10.5" \
     RDECK_BASE="/var/lib/rundeck" \
     RDECK_CONFIG="/etc/rundeck" \
     RDECK_KEYS_STORAGE_TYPE="db" \
@@ -40,7 +40,7 @@ ENV \
     \
     CONSOLE_LOGS="false" \
     \
-    CONFD_VERSION="0.14.0" \
+    CONFD_VERSION="0.15.0" \
     CONFD_OPTS="-backend=env"
 
 # Copy artifacts
@@ -52,10 +52,10 @@ RUN apk add --update --no-cache --virtual .deps $DEPS \
         && pip install --upgrade pip wheel \
         && pip install http://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-${MYSQL_CONN_VERSION}.tar.gz \
         && echo "Downloading Rundeck..." && curl -skLo ${RDECK_BASE}/rundeck.jar http://download.rundeck.org/jar/rundeck-launcher-${RDECK_VERSION}.jar \
-        && echo "Verifying Rundeck download..." && echo "cc1eba8868c6a9304b04c34a8ca2c7e572111929 *${RDECK_BASE}/rundeck.jar"| sha1sum -c - \
+        && echo "Verifying Rundeck download..." && echo "f02e727c3b02666a9468c2ee0d62c4dc06e105dd *${RDECK_BASE}/rundeck.jar"| sha1sum -c - \
         && echo "Installing Rundeck..." && java -jar ${RDECK_BASE}/rundeck.jar --installonly -b ${RDECK_BASE} -c ${RDECK_CONFIG} \
-        && echo "Downloading ConfD..." && curl -skLo /tmp/confd-${CONFD_VERSION} https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}/confd-${CONFD_VERSION}-linux-amd64 \
-        && mv /tmp/confd-${CONFD_VERSION} /bin/confd && chmod a+x /bin/confd \
+        && echo "Downloading ConfD..." && curl -skLo /bin/confd https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}/confd-${CONFD_VERSION}-linux-amd64 \
+        && chmod a+x /bin/confd \
         && rm /etc/supervisord.conf && ln -s /etc/supervisor/supervisord.conf /etc/supervisord.conf \
         && echo "Creating Rundeck user and group..." && addgroup rundeck && adduser -h ${RDECK_BASE} -D -s /bin/bash -G rundeck rundeck \
         && mkdir -v -p "${RDECK_CONFIG}"/ssl  "${RDECK_CONFIG}"/keys "${RDECK_CONFIG}"/projects \
