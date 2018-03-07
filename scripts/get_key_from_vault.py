@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from argparse import ArgumentParser
 from requests import get, exceptions as req_exceptions
@@ -45,7 +45,7 @@ def parse_json_response(http_response):
             data_info = json_response["data"]["value"]
         else:
             # @todo - deal when secret path is getting a list of keys
-            print ""
+            print("")
 
         return True, data_info
 

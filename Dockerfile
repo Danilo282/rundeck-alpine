@@ -1,13 +1,12 @@
 FROM openjdk:8u151-jre-alpine
 
-LABEL maintainer "Hugo Fonseca <hugofonseca93@hotmail.com>"
+LABEL maintainer "Hugo Fonseca <https://github.com/hugomcfonseca>"
 
 ENV \
-    DEPS="py-pip" \
-    PKGS="bash ca-certificates curl jq openssh-client py-requests supervisor" \
-    MYSQL_CONN_VERSION="2.1.7" \
+    PKGS="bash ca-certificates curl jq openssh-client python3 py3-requests supervisor" \
+    MYSQL_CONN_VERSION="8.0.6" \
     \
-    RDECK_VERSION="2.10.5" \
+    RDECK_VERSION="2.10.7" \
     RDECK_BASE="/var/lib/rundeck" \
     RDECK_CONFIG="/etc/rundeck" \
     RDECK_KEYS_STORAGE_TYPE="db" \
@@ -49,10 +48,9 @@ COPY etc/ /etc/
 
 RUN apk add --update --no-cache --virtual .deps $DEPS \
         && apk add --update --no-cache $PKGS \
-        && pip install --upgrade pip wheel \
-        && pip install http://dev.mysql.com/get/Downloads/Connector-Python/mysql-connector-python-${MYSQL_CONN_VERSION}.tar.gz \
+        && pip3 install --upgrade pip wheel mysql-connector-python==${MYSQL_CONN_VERSION} \
         && echo "Downloading Rundeck..." && curl -skLo ${RDECK_BASE}/rundeck.jar http://download.rundeck.org/jar/rundeck-launcher-${RDECK_VERSION}.jar \
-        && echo "Verifying Rundeck download..." && echo "f02e727c3b02666a9468c2ee0d62c4dc06e105dd *${RDECK_BASE}/rundeck.jar"| sha1sum -c - \
+        && echo "Verifying Rundeck download..." && echo "73d2fb95248385c13ed193fd12a0bd55e82dfd06 *${RDECK_BASE}/rundeck.jar"| sha1sum -c - \
         && echo "Installing Rundeck..." && java -jar ${RDECK_BASE}/rundeck.jar --installonly -b ${RDECK_BASE} -c ${RDECK_CONFIG} \
         && echo "Downloading ConfD..." && curl -skLo /bin/confd https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}/confd-${CONFD_VERSION}-linux-amd64 \
         && chmod a+x /bin/confd \
