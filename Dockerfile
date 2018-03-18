@@ -18,7 +18,7 @@ ENV \
     RDECK_THREADS_COUNT=10 \
     LOG_LEVEL="INFO" \
     ADMIN_USER="admin" \
-    ADMIN_PASSWORD="adminadmin" \ 
+    ADMIN_PASSWORD="adminadmin" \
     SSH_USER="rundeck" \
     PROJECT_NODES={} \
     PROJECT_DESCRIPTION="" \
@@ -49,10 +49,10 @@ COPY etc/ /etc/
 RUN apk add --update --no-cache --virtual .deps $DEPS \
         && apk add --update --no-cache $PKGS \
         && pip3 install --upgrade pip wheel mysql-connector-python==${MYSQL_CONN_VERSION} \
-        && echo "Downloading Rundeck..." && curl -skLo ${RDECK_BASE}/rundeck.jar http://download.rundeck.org/jar/rundeck-launcher-${RDECK_VERSION}.jar \
-        && echo "Verifying Rundeck download..." && echo "73d2fb95248385c13ed193fd12a0bd55e82dfd06 *${RDECK_BASE}/rundeck.jar"| sha1sum -c - \
+        && echo "Downloading Rundeck..." && curl -sLo ${RDECK_BASE}/rundeck.jar http://download.rundeck.org/jar/rundeck-launcher-${RDECK_VERSION}.jar \
+        && echo "Verifying Rundeck download..." && echo "5bc0ab83929df79e2a2e9983b1bf5545d133d6cf *${RDECK_BASE}/rundeck.jar"| sha1sum -c - \
         && echo "Installing Rundeck..." && java -jar ${RDECK_BASE}/rundeck.jar --installonly -b ${RDECK_BASE} -c ${RDECK_CONFIG} \
-        && echo "Downloading ConfD..." && curl -skLo /bin/confd https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}/confd-${CONFD_VERSION}-linux-amd64 \
+        && echo "Downloading ConfD..." && curl -sLo /bin/confd https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}/confd-${CONFD_VERSION}-linux-amd64 \
         && chmod a+x /bin/confd \
         && rm /etc/supervisord.conf && ln -s /etc/supervisor/supervisord.conf /etc/supervisord.conf \
         && echo "Creating Rundeck user and group..." && addgroup rundeck && adduser -h ${RDECK_BASE} -D -s /bin/bash -G rundeck rundeck \
@@ -67,5 +67,5 @@ VOLUME [ "${RDECK_BASE}", "${RDECK_CONFIG}" ]
 EXPOSE 4440 4443
 
 CMD ${RDECK_BASE}/scripts/run_confd_templates.sh \
-        && /bin/confd ${CONFD_OPTS} -onetime \
-        && exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
+        && confd ${CONFD_OPTS} -onetime \
+        && exec supervisord -n -c /etc/supervisor/supervisord.conf
