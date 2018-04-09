@@ -1,18 +1,18 @@
+RDECK_INSTALL="${RDECK_INSTALL:-/var/lib/rundeck}"
 RDECK_BASE="${RDECK_BASE:-/var/lib/rundeck}"
 RDECK_CONFIG="${RDECK_CONFIG:-/etc/rundeck}"
-RDECK_INSTALL="${RDECK_INSTALL:-/var/lib/rundeck}"
 RDECK_CONFIG_FILE="${RDECK_CONFIG_FILE:-$RDECK_CONFIG/rundeck-config.properties}"
 RDECK_SERVER_BASE="${RDECK_SERVER_BASE:-$RDECK_BASE/server}"
 RDECK_SERVER_CONFIG="${RDECK_SERVER_CONFIG:-$RDECK_SERVER_BASE/config}"
 RDECK_SERVER_DATA="${RDECK_SERVER_DATA:-$RDECK_BASE/data}"
 RDECK_PROJECTS="${RDECK_PROJECTS:-$RDECK_CONFIG/projects}"
-RUNDECK_WORKDIR="${RUNDECK_TEMPDIR:-$RDECK_BASE/work}"
 RUNDECK_TEMPDIR="${RUNDECK_TEMPDIR:-/tmp/rundeck}"
+RUNDECK_WORKDIR="${RUNDECK_TEMPDIR:-$RDECK_BASE/work}"
 RUNDECK_LOGDIR="${RUNDECK_LOGDIR:-$RDECK_BASE/logs}"
 RDECK_JVM_SETTINGS="${RDECK_JVM_SETTINGS:- -Xmx1024m -Xms256m -XX:MaxMetaspaceSize=256m -server}"
 RDECK_TRUSTSTORE_FILE="${RDECK_TRUSTSTORE_FILE:-$RDECK_CONFIG/ssl/truststore}"
 RDECK_TRUSTSTORE_TYPE="${RDECK_TRUSTSTORE_TYPE:-jks}"
-JAAS_CONF="${JAAS_CONF:-$RDECK_CONFIG/jaas-loginmodule.conf}"
+JAAS_CONF="${JAAS_CONF:-$RDECK_SERVER_CONFIG/jaas-loginmodule.conf}"
 LOGIN_MODULE="${LOGIN_MODULE:-RDpropertyfilelogin}"
 RDECK_HTTP_PORT=${RDECK_HTTP_PORT:-4440}
 RDECK_HTTPS_PORT=${RDECK_HTTPS_PORT:-4443}
@@ -46,16 +46,13 @@ RDECK_JVM="-Djava.security.auth.login.config=$JAAS_CONF \
            -Drdeck.config=$RDECK_CONFIG \
            -Drundeck.server.configDir=$RDECK_SERVER_CONFIG \
            -Dserver.datastore.path=$RDECK_SERVER_DATA \
+           -Drundeck.server.serverDir=$RDECK_INSTALL \
            -Drdeck.projects=$RDECK_PROJECTS \
            -Drdeck.runlogs=$RUNDECK_LOGDIR \
+           -Drundeck.config.location=$RDECK_CONFIG_FILE \
            -Djava.io.tmpdir=$RUNDECK_TEMPDIR \
            -Drundeck.server.workDir=$RUNDECK_WORKDIR \
-           -Dserver.http.port=${RDECK_HTTP_PORT}" 
-
-#rundeck.jaaslogin="false"
-#loginmodule.conf.name=${JAAS_CONF}
-#rundeck.config.name=custom rundeck config
-
+           -Dserver.http.port=$RDECK_HTTP_PORT"
 #
 # Set min/max heap size
 #
@@ -65,7 +62,7 @@ RDECK_JVM="$RDECK_JVM $RDECK_JVM_SETTINGS"
 #
 if [ "$RDECK_SSL_ENABLED" = true ] ; then
   RDECK_SSL_OPTS="${RDECK_SSL_OPTS:- -Djavax.net.ssl.trustStore=$RDECK_TRUSTSTORE_FILE -Djavax.net.ssl.trustStoreType=$RDECK_TRUSTSTORE_TYPE -Djava.protocol.handler.pkgs=com.sun.net.ssl.internal.www.protocol}"
-  RDECK_JVM="$RDECK_JVM -Drundeck.ssl.config=$RDECK_SERVER_CONFIG/ssl/ssl.properties -Dserver.https.port=${RDECK_HTTPS_PORT} ${RDECK_SSL_OPTS}"
+  RDECK_JVM="$RDECK_JVM -Drundeck.ssl.config=$RDECK_CONFIG/ssl/ssl.properties -Dserver.https.port=${RDECK_HTTPS_PORT} ${RDECK_SSL_OPTS}"
 fi
 
 RDECK_SKIP_INSTALL="--skipinstall"

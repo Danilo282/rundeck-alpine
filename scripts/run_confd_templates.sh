@@ -21,7 +21,7 @@ function parse_args {
             if [[ "${BACKEND_NODE}" == "http://"* ]] || [[ "${BACKEND_NODE}" == "https://"* ]]; then
                 BACKEND_URL=$(echo "${BACKEND_NODE}" | awk -F "/" '{ print $3}' | awk -F ":" '{ print $1}')
                 BACKEND_PORT=$(echo "${BACKEND_NODE}" | awk -F "/" '{ print $3}' | awk -F ":" '{ print $2}')
-            fi 
+            fi
         elif [[ $arg == "-prefix="* ]]; then
             BACKEND_PREFIX=$(echo $arg | awk -F "=" '{ print $2 }')
         fi
@@ -31,12 +31,12 @@ function parse_args {
 parse_args "${confd_backend}"
 
 if [[ ${BACKEND_TYPE} == "vault" ]]; then
-    if [ ! -z $BACKEND_PORT ]; then 
+    if [ ! -z $BACKEND_PORT ]; then
         PORT="-p ${BACKEND_PORT}"
-    else 
+    else
         PORT=""
     fi
-    
+
     nodes=$(python ${RDECK_BASE}/scripts/get_key_from_vault.py -a ${BACKEND_TOKEN} -s /project/nodes -t ${BACKEND_URL} --prefix ${BACKEND_PREFIX} --secret-backend '' ${PORT})
 else
     nodes=${PROJECT_NODES}

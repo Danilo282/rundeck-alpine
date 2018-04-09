@@ -1,6 +1,6 @@
 #!/bin/sh
 
-RDECK_PROFILE="/etc/rundeck/profile"
+RDECK_PROFILE=${RDECK_CONFIG:-/etc/rundeck}/profile
 RETRIES=10
 
 i=0
