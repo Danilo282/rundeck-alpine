@@ -4,21 +4,21 @@ services:
 env:
   global:
     - REPO_NAME=hugomcfonseca/rundeck-alpine
+    - VERSION=2.10.8
 
 before_script:
-  - version="$(awk '$2 == "RDECK_VERSION" { print $3; exit }' Dockerfile)"
   - docker pull "$REPO_NAME" || true
 script:
-  - docker build --pull --cache-from "$REPO_NAME" --target=basic  --tag "$REPO_NAME:${version}-basic" .
-  - docker build --pull --cache-from "$REPO_NAME" --target=templated  --tag "$REPO_NAME:${version}-templated" .
-  - docker build --pull --cache-from "$REPO_NAME" --target=production  --tag "$REPO_NAME:${version}" .
+  - docker build --pull --cache-from "$REPO_NAME" --target=basic  --tag "$REPO_NAME:${VERSION}-basic" .
+  - docker build --pull --cache-from "$REPO_NAME" --target=templated  --tag "$REPO_NAME:${VERSION}-templated" .
+  - docker build --pull --cache-from "$REPO_NAME" --target=production  --tag "$REPO_NAME:${VERSION}" .
 
 after_script:
   - docker images
 
 before_deploy:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker tag "$REPO_NAME:${version}" "${REPO_NAME}:latest"
+  - docker tag "$REPO_NAME:${VERSION}" "${REPO_NAME}:latest"
 deploy:
   provider: script
   script:
