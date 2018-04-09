@@ -8,11 +8,11 @@ keys = [
     "/datasource/port",
     "/datasource/user",
     "/datasource/password",
-    "/rd/base",
-    "/rd/url",
-    "/rd/keys/storage/type",
-    "/rd/project/storage/type",
-    "/rd/ssl/enabled",
-    "/rd/threads/count",
+    "/rdeck/base",
+    "/rdeck/url",
+    "/rdeck/keys/storage/type",
+    "/rdeck/project/storage/type",
+    "/rdeck/ssl/enabled",
+    "/rdeck/threads/count",
     "/log/level"
 ]

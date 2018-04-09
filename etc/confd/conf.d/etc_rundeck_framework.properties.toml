@@ -5,10 +5,10 @@ owner = "rundeck"
 keys = [
     "/admin/user",
     "/admin/password",
-    "/rd/base",
-    "/rd/config",
-    "/rd/host",
-    "/rd/port",
-    "/rd/ssl/enabled",
+    "/rdeck/base",
+    "/rdeck/config",
+    "/rdeck/host",
+    "/rdeck/port",
+    "/rdeck/ssl/enabled",
     "/ssh/user"
 ]
