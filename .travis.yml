@@ -23,4 +23,4 @@ deploy:
   provider: script
   script: docker push ${REPO_NAME}:${VERSION}-basic ${REPO_NAME}:${VERSION}-templated ${REPO_NAME}:${VERSION} ${REPO_NAME}:latest
   on:
-branch: issue/9
+branch: master
