@@ -21,9 +21,6 @@ before_deploy:
   - docker tag "$REPO_NAME:${VERSION}" "${REPO_NAME}:latest"
 deploy:
   provider: script
-  script:
-    - docker push ${REPO_NAME}:${VERSION}-basic
-    - docker push ${REPO_NAME}:${VERSION}-templated
-    - docker push ${REPO_NAME}:${VERSION} ${REPO_NAME}:latest
+  script: docker push ${REPO_NAME}:${VERSION}-basic ${REPO_NAME}:${VERSION}-templated ${REPO_NAME}:${VERSION} ${REPO_NAME}:latest
   on:
-branch: master
+branch: issue/9
