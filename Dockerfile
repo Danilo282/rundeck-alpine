@@ -10,15 +10,14 @@ ENV RD_VERSION=2.10.8 \
 COPY etc/rundeck/ /etc/rundeck/
 COPY scripts/ ${RD_BASE}/scripts/
 
-RUN PKGS="bash ca-certificates openssh-client python2"; apk add --update --no-cache ${PKGS} \
-    && DEPS="py2-pip"; apk add --update --no-cache --virtual .deps ${DEPS} \
-    && PIP_PKGS="pip wheel mysql-connector-python==${MYSQL_CONN_VERSION}"; pip install --upgrade ${PIP_PKGS} \
+RUN PKGS="bash ca-certificates openssh-client"; apk add --update --no-cache ${PKGS} \
     && wget -qO ${RD_BASE}/rundeck.jar http://download.rundeck.org/jar/rundeck-launcher-${RD_VERSION}.jar \
     && echo -n "0ce13b4473cf2889e7b02cc32b7688b1bf3ab71a *${RD_BASE}/rundeck.jar"| sha1sum -c - \
     && java -jar ${RD_BASE}/rundeck.jar --installonly -b ${RD_BASE} -c ${RD_CONFIG} \
     && mkdir -v -p "${RD_CONFIG}"/ssl  "${RD_CONFIG}"/keys "${RD_CONFIG}"/projects \
     && echo "Creating Rundeck user and group..." && addgroup rundeck && adduser -h ${RD_BASE} -D -s /bin/bash -G rundeck rundeck \
-    && apk del .deps && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
+    && chmod u+x ${RD_BASE}/scripts/ \
+    && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
 WORKDIR ${RD_BASE}
 
@@ -29,13 +28,13 @@ EXPOSE 4440 4443
 FROM basic as templated
 
 ENV \
-    RDECK_KEYS_STORAGE_TYPE="db" \
-    RDECK_PROJECT_STORAGE_TYPE="db" \
-    RDECK_SSL_ENABLED="true" \
-    RDECK_HOST="localhost" \
-    RDECK_PORT=4440 \
-    RDECK_URL="localhost:4440" \
-    RDECK_THREADS_COUNT=10 \
+    RD_KEYS_STORAGE_TYPE="db" \
+    RD_PROJECT_STORAGE_TYPE="db" \
+    RD_SSL_ENABLED="true" \
+    RD_HOST="localhost" \
+    RD_PORT=4440 \
+    RD_URL="localhost:4440" \
+    RD_THREADS_COUNT=10 \
     LOG_LEVEL="INFO" \
     ADMIN_USER="admin" \
     ADMIN_PASSWORD="adminadmin" \
@@ -71,7 +70,9 @@ FROM templated as production
 
 COPY etc/supervisor /etc/supervisor/
 
-RUN PKGS="supervisor>=3.3.3"; apk add --update --no-cache ${PKGS} \
+RUN PKGS="curl jq python2 py-requests supervisor>=3.3.3"; apk add --update --no-cache ${PKGS} \
+    && DEPS="py2-pip"; apk add --update --no-cache --virtual .deps ${DEPS} \
+    && PIP_PKGS="pip wheel mysql-connector-python==${MYSQL_CONN_VERSION}"; pip install --upgrade ${PIP_PKGS} \
     && rm /etc/supervisord.conf && ln -s /etc/supervisor/supervisord.conf /etc/supervisord.conf \
     && rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 

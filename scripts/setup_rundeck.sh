@@ -4,7 +4,6 @@ echo "### Starting automated Rundeck setup... ###"
 
 rdeck_home=${RDECK_BASE:-/var/lib/rundeck}
 rdeck_config=${RDECK_CONFIG:-/etc/rundeck}
-rdeck_version=${RDECK_VERSION:-2.10.2}
 profile=${RDECK_CONFIG}/profile
 lock_file=${rdeck_home}/.entrypoint.lock
 
@@ -14,14 +13,14 @@ while [ ! -f ${profile} ]; do
 done
 
 if [ ! -f $lock_file ]; then
-    echo "  # Creating Rundeck directories..." 
+    echo "  # Creating Rundeck directories..."
     mkdir -v -p "${rdeck_config}"/ssl  "${rdeck_config}"/keys "${rdeck_home}"/jumia_scripts /tmp/rundeck
     echo "  # Rundeck directories created."
 
-    echo "  # Setting permissions and ownership..." 
+    echo "  # Setting permissions and ownership..."
     chown -R rundeck: "${rdeck_config}" "${rdeck_home}"
     chown -R 750 "${rdeck_config}"
-    echo "  # All permissions and ownership set up."    
+    echo "  # All permissions and ownership set up."
 
     echo "  # Downloading default plugins..."
 
@@ -30,10 +29,10 @@ if [ ! -f $lock_file ]; then
     echo "  # Creating lock to avoid execution of unnecessary steps..."
     touch ${rdeck_home}/.entrypoint.lock
     echo "  # Lock created."
-else 
+else
     echo "This is an upgrade of an existing version of Rundeck..."
-fi 
+fi
 
-echo "### Rundeck setup finished! ###" 
+echo "### Rundeck setup finished! ###"
 
 exit 0

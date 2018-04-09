@@ -3,7 +3,7 @@ src = "etc/rundeck/project.properties"
 dest = "/etc/rundeck/project.properties"
 owner = "rundeck"
 keys = [
-    "/rdeck/config",
+    "/rd/config",
     "/project/description",
     "/project/organization"
 ]

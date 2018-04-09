@@ -3,5 +3,5 @@ src = "var/lib/rundeck/server/config/jaas-loginmodule.conf"
 dest = "/var/lib/rundeck/server/config/jaas-loginmodule.conf"
 owner = "rundeck"
 keys = [
-    "/rdeck/base"
+    "/rd/base"
 ]
