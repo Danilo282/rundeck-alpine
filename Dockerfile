@@ -1,8 +1,8 @@
-FROM openjdk:8u151-jre-alpine as basic
+FROM openjdk:8u171-jre-alpine as basic
 
 LABEL maintainer "Hugo Fonseca <https://github.com/hugomcfonseca>"
 
-ENV RDECK_VERSION=2.10.8 \
+ENV RDECK_VERSION=2.11.4 \
     RDECK_BASE=/var/lib/rundeck \
     RDECK_CONFIG=/etc/rundeck
 
@@ -11,7 +11,7 @@ COPY scripts/ ${RDECK_BASE}/scripts/
 
 RUN PKGS="bash ca-certificates openssh-client"; apk add --update --no-cache ${PKGS} \
     && wget -qO ${RDECK_BASE}/rundeck.jar http://download.rundeck.org/jar/rundeck-launcher-${RDECK_VERSION}.jar \
-    && echo -n "0ce13b4473cf2889e7b02cc32b7688b1bf3ab71a *${RDECK_BASE}/rundeck.jar"| sha1sum -c - \
+    && echo -n "2bdac79aa28938b847266275b807ca031838830d *${RDECK_BASE}/rundeck.jar"| sha1sum -c - \
     && java -jar ${RDECK_BASE}/rundeck.jar --installonly -b ${RDECK_BASE} -c ${RDECK_CONFIG} \
     && mkdir -v -p "${RDECK_CONFIG}"/ssl  "${RDECK_CONFIG}"/keys "${RDECK_CONFIG}"/projects \
     && echo "Creating Rundeck user and group..." && addgroup rundeck && adduser -h ${RDECK_BASE} -D -s /bin/bash -G rundeck rundeck \
@@ -57,7 +57,7 @@ ENV \
     \
     CONSOLE_LOGS="false"
 
-ENV CONFD_VERSION=0.15.0 \
+ENV CONFD_VERSION=0.16.0 \
     CONFD_OPTS=-backend=env
 
 COPY etc/confd /etc/confd/
@@ -67,7 +67,7 @@ RUN wget -qO /usr/local/bin/confd https://github.com/kelseyhightower/confd/relea
 
 FROM templated as production
 
-ENV MYSQL_CONN_VERSION=8.0.6
+ENV MYSQL_CONN_VERSION=8.0.11
 
 COPY etc/supervisor /etc/supervisor/
 
