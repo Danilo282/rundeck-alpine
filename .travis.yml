@@ -9,18 +9,22 @@ env:
 before_script:
   - docker pull "$REPO_NAME" || true
 script:
-  - docker build --pull --cache-from "$REPO_NAME" --target=basic  --tag "$REPO_NAME:${VERSION}-basic" .
-  - docker build --pull --cache-from "$REPO_NAME" --target=templated  --tag "$REPO_NAME:${VERSION}-templated" .
-  - docker build --pull --cache-from "$REPO_NAME" --target=production  --tag "$REPO_NAME:${VERSION}" .
+  - docker build --pull --cache-from "$REPO_NAME" --target=basic  --tag "$REPO_NAME:$VERSION-basic" .
+  - docker build --pull --cache-from "$REPO_NAME" --target=templated  --tag "$REPO_NAME:$VERSION-templated" .
+  - docker build --pull --cache-from "$REPO_NAME" --target=production  --tag "$REPO_NAME:$VERSION" .
 
 after_script:
   - docker images
 
 before_deploy:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker tag "$REPO_NAME:${VERSION}" "${REPO_NAME}:latest"
+  - docker tag "$REPO_NAME:$VERSION" "$REPO_NAME:latest"
 deploy:
   provider: script
-  script: docker push ${REPO_NAME}:${VERSION}-basic ${REPO_NAME}:${VERSION}-templated ${REPO_NAME}:${VERSION} ${REPO_NAME}:latest
+  script:
+    docker push ${REPO_NAME}:$VERSION-basic;
+    docker push ${REPO_NAME}:$VERSION-templated;
+    docker push ${REPO_NAME}:$VERSION;
+    docker push ${REPO_NAME}:latest
   on:
-branch: master
+    branch: master
