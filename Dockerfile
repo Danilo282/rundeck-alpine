@@ -1,8 +1,8 @@
-FROM openjdk:8u171-jre-alpine as basic
+FROM openjdk:8u201-jre-alpine3.9 as basic
 
 LABEL maintainer "Hugo Fonseca <https://github.com/hugomcfonseca>"
 
-ENV RDECK_VERSION=2.11.4 \
+ENV RDECK_VERSION=3.0.19-20190327 \
     RDECK_BASE=/var/lib/rundeck \
     RDECK_CONFIG=/etc/rundeck
 
@@ -10,8 +10,8 @@ COPY etc/rundeck/ /etc/rundeck/
 COPY scripts/ ${RDECK_BASE}/scripts/
 
 RUN PKGS="bash ca-certificates openssh-client"; apk add --update --no-cache ${PKGS} \
-    && wget -qO ${RDECK_BASE}/rundeck.jar http://download.rundeck.org/jar/rundeck-launcher-${RDECK_VERSION}.jar \
-    && echo -n "2bdac79aa28938b847266275b807ca031838830d *${RDECK_BASE}/rundeck.jar"| sha1sum -c - \
+    && wget -qO ${RDECK_BASE}/rundeck.jar http://dl.bintray.com/rundeck/rundeck-maven/rundeck-${RDECK_VERSION}.war \
+    && echo -n "c105980112286b0565eefeded9ded7ac1f059b93 *${RDECK_BASE}/rundeck.jar"| sha1sum -c - \
     && java -jar ${RDECK_BASE}/rundeck.jar --installonly -b ${RDECK_BASE} -c ${RDECK_CONFIG} \
     && mkdir -v -p "${RDECK_CONFIG}"/ssl  "${RDECK_CONFIG}"/keys "${RDECK_CONFIG}"/projects \
     && echo "Creating Rundeck user and group..." && addgroup rundeck && adduser -h ${RDECK_BASE} -D -s /bin/bash -G rundeck rundeck \
@@ -67,7 +67,7 @@ RUN wget -qO /usr/local/bin/confd https://github.com/kelseyhightower/confd/relea
 
 FROM templated as production
 
-ENV MYSQL_CONN_VERSION=8.0.11
+ENV MYSQL_CONN_VERSION=8.0.15
 
 COPY etc/supervisor /etc/supervisor/
 

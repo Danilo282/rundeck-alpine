@@ -1,6 +1,6 @@
 [template]
-src = "var/lib/rundeck/server/config/rundeck-config.properties"
-dest = "/var/lib/rundeck/server/config/rundeck-config.properties"
+src = "etc/rundeck/rundeck-config.properties"
+dest = "/etc/rundeck/rundeck-config.properties"
 owner = "rundeck"
 keys = [
     "/datasource/dbname",
